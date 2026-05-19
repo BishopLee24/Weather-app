@@ -25,6 +25,11 @@ const forecastContainer =
 const historyList =
     document.getElementById("history-list");
 
+const favoritesList =
+    document.getElementById(
+        "favorites-list"
+    );
+
 const clearHistoryButton =
     document.getElementById(
         "clear-history-btn"
@@ -53,6 +58,8 @@ let currentCity = "";
 
 let darkModeEnabled = false;
 
+let favoriteCities = [];
+
 
 /* =========================
    Local Storage Hydration
@@ -61,6 +68,11 @@ let darkModeEnabled = false;
 const savedHistory =
     localStorage.getItem(
         "searchHistory"
+    );
+
+const savedDarkMode =
+    localStorage.getItem(
+        "darkMode"
     );
 
 if (savedHistory) {
@@ -81,6 +93,15 @@ if (savedHistory) {
             searchHistory[0]
         );
     }
+
+    if (savedDarkMode === "enabled") {
+
+    darkModeEnabled = true;
+
+    document.body.classList.add(
+        "dark-mode"
+    );
+}
 }
 
 
@@ -154,10 +175,19 @@ themeToggleButton.addEventListener(
                 "dark-mode"
             );
 
+            localStorage.setItem(
+                "darkMode",
+                "enabled"
+            );
+
         } else {
 
             document.body.classList.remove(
                 "dark-mode"
+            );
+
+            localStorage.removeItem(
+                "darkMode"
             );
         }
     }
@@ -202,6 +232,55 @@ historyList.addEventListener(
 
 
 /* =========================
+   Favorite Button Click
+========================= */
+
+weatherInfo.addEventListener(
+
+    "click",
+
+    function (event) {
+
+        if (
+
+            event.target.classList.contains(
+
+                "favorite-btn"
+
+            )
+
+        ) {
+
+            const city =
+
+                event.target.dataset.city;
+
+            if (
+
+                !favoriteCities.includes(city)
+
+            ) {
+
+                favoriteCities.push(city);
+
+                localStorage.setItem(
+
+                    "favoriteCities",
+
+                    JSON.stringify(
+                        favoriteCities
+                    )
+
+                );
+
+                renderFavoriteItem(city);
+            }
+        }
+    }
+);
+
+
+/* =========================
    Clear Search History
 ========================= */
 
@@ -217,7 +296,7 @@ clearHistoryButton.addEventListener(
 
         historyList.innerHTML = "";
     }
-);
+); 
 
 
 /* =========================
@@ -348,6 +427,20 @@ function renderHistoryItem(city) {
             ${city}
         </li>
     ` + historyList.innerHTML;
+}
+
+
+/* =========================
+   Render Favorite Item
+========================= */
+
+function renderFavoriteItem(city) {
+
+    favoritesList.innerHTML += `
+        <li data-city="${city}">
+            ${city}
+        </li>
+    `;
 }
 
 
@@ -498,6 +591,13 @@ async function fetchWeather(city) {
                 <p class="description">
                     ${description}
                 </p>
+
+                <button
+                    class="favorite-btn"
+                    data-city="${cityName}"
+                >
+                    Add to Favorites
+                </button>
 
             </div>
         `;
