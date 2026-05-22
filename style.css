@@ -160,9 +160,12 @@ h1 {
 }
 
 .history-title {
-  margin-bottom: 1rem;
-}
+  color: var(--heading-text);
 
+  margin-bottom: 1rem;
+
+  font-size: 1.4rem;
+}
 
 /* =========================
    Search Section
@@ -415,14 +418,93 @@ button:disabled {
 
 
 /* =========================
+   Favorite Cities Section
+========================= */
+
+#favorite-cities {
+  margin-top: 2rem;
+}
+
+.favorites-title {
+  color: var(--heading-text);
+
+  margin-bottom: 1rem;
+
+  font-size: 1.4rem;
+}
+
+#favorites-list {
+  list-style: none;
+}
+
+#favorites-list li {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  background-color: var(--card-bg);
+
+  color: var(--body-text);
+
+  padding: 0.9rem 1rem;
+
+  margin-bottom: 0.75rem;
+
+  border-radius: 10px;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+#favorites-list li:hover {
+  transform: translateY(-2px);
+}
+
+.remove-favorite-btn {
+  width: auto;
+
+  padding: 0.45rem 0.8rem;
+
+  background-color: #ff4d4d;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-size: 0.9rem;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.remove-favorite-btn:hover {
+  background-color: #e63939;
+
+  transform: scale(1.05);
+}
+
+
+
+/* =========================
    Active History Item
 ========================= */
 
 .active-history {
   background-color: #d6f0ff !important;
 
+  color: #1f2937 !important;
+
   font-weight: bold;
 }
+
 
 /* =========================
    Loading Spinner

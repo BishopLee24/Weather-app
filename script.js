@@ -75,6 +75,21 @@ const savedDarkMode =
         "darkMode"
     );
 
+const savedFavorites =
+    localStorage.getItem(
+        "favoriteCities"
+    );
+
+if (savedFavorites) {
+    favoriteCities = JSON.parse(savedFavorites);
+
+    favoriteCities.forEach(function (city) {
+
+        renderFavoriteItem(city);
+
+    });
+}
+
 if (savedHistory) {
 
     searchHistory =
@@ -241,9 +256,7 @@ weatherInfo.addEventListener(
 
     function (event) {
 
-        if (
-
-            event.target.classList.contains(
+        if (event.target.classList.contains(
 
                 "favorite-btn"
 
@@ -251,13 +264,9 @@ weatherInfo.addEventListener(
 
         ) {
 
-            const city =
+            const city = event.target.dataset.city;
 
-                event.target.dataset.city;
-
-            if (
-
-                !favoriteCities.includes(city)
+            if (!favoriteCities.includes(city)
 
             ) {
 
@@ -267,9 +276,7 @@ weatherInfo.addEventListener(
 
                     "favoriteCities",
 
-                    JSON.stringify(
-                        favoriteCities
-                    )
+                    JSON.stringify(favoriteCities)
 
                 );
 
@@ -277,6 +284,72 @@ weatherInfo.addEventListener(
             }
         }
     }
+);
+
+
+/* =========================
+   Favorite List Click
+========================= */
+
+favoritesList.addEventListener(
+
+    "click",
+
+    function (event) {
+
+        const city =
+
+            event.target.dataset.city;
+
+        if (
+
+            event.target.classList.contains(
+
+                "remove-favorite-btn"
+
+            )
+
+        ) {
+
+            favoriteCities =
+
+                favoriteCities.filter(
+
+                    function (favoriteCity) {
+
+                        return favoriteCity !== city;
+                    }
+
+                );
+
+            localStorage.setItem(
+
+                "favoriteCities",
+
+                JSON.stringify(favoriteCities)
+
+            );
+
+            favoritesList.innerHTML = "";
+
+            favoriteCities.forEach(
+
+                function (favoriteCity) {
+
+                    renderFavoriteItem(favoriteCity);
+                }
+
+            );
+
+        } else if (city) {
+
+            cityInput.value = city;
+
+            handleSearch();
+        }
+
+    }
+
 );
 
 
@@ -438,8 +511,19 @@ function renderFavoriteItem(city) {
 
     favoritesList.innerHTML += `
         <li data-city="${city}">
-            ${city}
-        </li>
+
+        <span>
+          ${city}
+        </span>
+
+        <button
+          class="remove-favorite-btn"
+          data-city="${city}"
+        >
+          Remove
+        </button>
+
+</li>
     `;
 }
 
